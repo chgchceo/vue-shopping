@@ -1,0 +1,7 @@
+{
+    "cart" : [
+        {"id":1,"name":"苹果","img":"https://img/we.png","price":13},
+        {"id":2,"name":"香蕉","img":"https://img/we.png","price":8},
+        {"id":3,"name":"草莓","img":"https://img/we.png","price":23}
+    ]
+}
