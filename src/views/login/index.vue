@@ -10,12 +10,12 @@
 
       <div class="code">
         <input v-model="imgNum" placeholder="请输入图形验证码" class="inp" type="text" />
-        <img src="@/assets/logo.png" alt="" />
+        <img @click="getPicCode" v-show="picUrl" :src="picUrl" alt="" />
       </div>
 
       <div class="code">
         <input v-model="smsNum" placeholder="请输入短信验证码" class="inp" type="text" />
-        <button class="codeNum">获取验证码</button>
+        <button @click="getCodeNum" class="codeNum">{{ second === totalSecond ? '获取验证码' : second + '秒后重新发送' }}</button>
       </div>
 
       <button @click="loginFn" class="login">登录</button>
@@ -24,19 +24,81 @@
 </template>
 
 <script>
+import { getPicCode, getMsgCode, codeLogin } from '@/api/login'
 export default {
   name: 'loginIndex',
   data () {
     return {
       phone: '',
       imgNum: '',
-      smsNum: ''
+      smsNum: '',
+      picUrl: '',
+      picKey: '',
+      totalSecond: 6, // 倒计时最大秒数
+      second: 6, // 当前的秒数
+      timer: null
     }
   },
+  created () {
+    this.getPicCode()
+  },
   methods: {
-    loginFn () {
-      console.log(this.phone, this.imgNum, this.smsNum)
+    async loginFn () {
+      if (!this.validFn()) {
+        return
+      }
+      if (!/^\d{6}$/.test(this.smsNum)) {
+        this.$toast('请输入正确的短信验证码')
+        return
+      }
+
+      console.log(this.phone, this.smsNum)
+      const res = await codeLogin(this.phone, this.smsNum)
+      console.log(res)
+      this.$toast('登录成功')
       this.$router.back()
+    },
+    async getPicCode () {
+      const { data } = await getPicCode()
+      this.picUrl = data.base64
+      this.picKey = data.key
+    },
+    // 手机号，图形验证码验证
+    validFn () {
+      const regex = /^1[3-9]\d{9}$/
+      if (!regex.test(this.phone)) {
+        this.$toast('请输入正确的手机号')
+        return false
+      }
+      if (!/^.{4}$/.test(this.imgNum)) {
+        this.$toast('请输入的图形验证码')
+        return false
+      }
+      return true
+    },
+    // 获取短信验证码
+    async getCodeNum () {
+      if (!this.validFn()) {
+        return
+      }
+      console.log(this.timer)
+      console.log(this.second)
+      if (!this.timer && this.totalSecond === this.second) {
+        this.timer = setInterval(() => {
+          this.second--
+          if (this.second <= 0) {
+            this.second = this.totalSecond
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+
+        // 发送请求
+        const res = await getMsgCode(this.imgNum, this.picKey, this.phone)
+
+        this.$toast('短信验证码发送成功')
+        console.log(res)
+      }
     }
   }
 }
