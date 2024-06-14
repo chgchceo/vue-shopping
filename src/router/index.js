@@ -28,7 +28,7 @@ const router = new VueRouter({
       ]
     },
     { path: '/search', component: Search },
-    { path: '/detail', component: Prodetail },
+    { path: '/detail/:id', component: Prodetail },
     { path: '/user', component: User },
     { path: '/pay', component: Pay }
   ]
