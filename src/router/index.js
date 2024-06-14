@@ -8,6 +8,8 @@ import Home from '@/views/layout/home'
 import Categoty from '@/views/layout/category'
 import Cart from '@/views/layout/cart'
 import User from '@/views/layout/user'
+import Pay from '@/views/pay'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -27,8 +29,25 @@ const router = new VueRouter({
     },
     { path: '/search', component: Search },
     { path: '/detail', component: Prodetail },
-    { path: '/user', component: User }
+    { path: '/user', component: User },
+    { path: '/pay', component: Pay }
   ]
+})
+
+// 需要进行token登录的路由，进行拦截处理
+const authorRoutes = ['/pay']
+router.beforeEach((to, from, next) => {
+  if (authorRoutes.includes(to.path)) {
+    // 判断是否登录
+    const token = store.getters.token
+    if (token) {
+      next()
+    } else {
+      next('/login')
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
