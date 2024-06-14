@@ -10,6 +10,7 @@ import Cart from '@/views/layout/cart'
 import User from '@/views/layout/user'
 import Pay from '@/views/pay'
 import store from '@/store'
+import SearchList from '@/views/search/list'
 
 Vue.use(VueRouter)
 
@@ -30,7 +31,8 @@ const router = new VueRouter({
     { path: '/search', component: Search },
     { path: '/detail/:id', component: Prodetail },
     { path: '/user', component: User },
-    { path: '/pay', component: Pay }
+    { path: '/pay', component: Pay },
+    { path: '/searchlist', component: SearchList }
   ]
 })
 
