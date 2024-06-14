@@ -54,7 +54,8 @@ export default {
 
       console.log(this.phone, this.smsNum)
       const res = await codeLogin(this.phone, this.smsNum)
-      console.log(res)
+
+      this.$store.commit('user/setUserInfo', res.data)
       this.$toast('登录成功')
       this.$router.back()
     },

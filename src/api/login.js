@@ -26,5 +26,5 @@ export const codeLogin = (mobile, smsCode) => {
       mobile,
       smsCode
     }
-  })
+  }, { headers: { platform: 'h5' } })
 }

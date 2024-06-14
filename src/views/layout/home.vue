@@ -1,5 +1,8 @@
 <template>
-  <div>home</div>
+  <div>home
+
+    {{ this.$store.state.user.userInfo }}
+  </div>
 </template>
 
 <script>
