@@ -39,6 +39,7 @@ export default {
   },
   created () {
     this.getProductList({
+      categoryId: this.$route.query.categoryId,
       goodsName: this.search,
       page: 1
     })
