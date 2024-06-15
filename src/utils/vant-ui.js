@@ -1,7 +1,10 @@
 
 import Vue from 'vue'
-import { Rate, Button, Icon, Cell, Popup, Tabbar, TabbarItem, NavBar, Toast, Search, Swipe, SwipeItem, Grid, GridItem } from 'vant'
+import { Dialog, Overlay, ActionSheet, Rate, Button, Icon, Cell, Popup, Tabbar, TabbarItem, NavBar, Toast, Search, Swipe, SwipeItem, Grid, GridItem } from 'vant'
 
+Vue.use(Dialog)
+Vue.use(Overlay)
+Vue.use(ActionSheet)
 Vue.use(Rate)
 Vue.use(Button)
 Vue.use(Icon)

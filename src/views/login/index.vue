@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="会员登录" left-arrow @click-left="$router.go(-1)" />
+    <van-nav-bar title="会员登录" left-arrow @click-left="goBackFn" />
 
     <div class="box">
       <h2>手机号登录</h2>
@@ -57,7 +57,10 @@ export default {
 
       this.$store.commit('user/setUserInfo', res.data)
       this.$toast('登录成功')
-      this.$router.back()
+
+      // 判断是否有回调地址
+      const backUrl = this.$route.query.backUrl || '/'
+      this.$router.replace(backUrl)
     },
     async getPicCode () {
       const { data } = await getPicCode()
@@ -99,6 +102,14 @@ export default {
 
         this.$toast('短信验证码发送成功')
         console.log(res)
+      }
+    },
+    goBackFn () {
+      const backUrl = this.$route.query.backUrl
+      if (backUrl) {
+        this.$router.replace(backUrl)
+      } else {
+        this.$router.go(-1)
       }
     }
   }
