@@ -17,6 +17,11 @@ export default {
   },
   actions: {
 
+    // 退出登录
+    logOut (context) {
+      context.commit('setUserInfo', {})
+      context.commit('cart/setCartList', [], { root: true })
+    }
   },
   getters: {
 

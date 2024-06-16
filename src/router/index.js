@@ -9,6 +9,7 @@ import Categoty from '@/views/layout/category'
 import Cart from '@/views/layout/cart'
 import User from '@/views/layout/user'
 import Pay from '@/views/pay'
+import Order from '@/views/order'
 import store from '@/store'
 import SearchList from '@/views/search/list'
 
@@ -32,6 +33,7 @@ const router = new VueRouter({
     { path: '/detail/:id', component: Prodetail },
     { path: '/user', component: User },
     { path: '/pay', component: Pay },
+    { path: '/order', component: Order },
     { path: '/searchlist', component: SearchList }
   ]
 })
