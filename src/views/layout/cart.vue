@@ -63,6 +63,7 @@
             >
           </div>
           <div
+          @click="goPayFn"
             v-if="!isEdit"
             class="goPay"
             :class="{ disabled: selCount === 0 }"
@@ -75,7 +76,7 @@
     </div>
 
     <div class="empty-cart" v-else>
-      <img src="@/assets/logo.png" alt="" />
+      <img src="@/assets/empty.png" alt="" />
       <div class="tips">您的购物车是空的, 快去逛逛吧</div>
       <div class="btn" @click="$router.push('/')">去逛逛</div>
     </div>
@@ -113,6 +114,15 @@ export default {
       this.$store.dispatch('cart/delSelAction')
       // this.delSelAction()
       this.isEdit = false
+    },
+    goPayFn () {
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'cart',
+          cartIds: this.selCartList.map(item => item.id).join(',')
+        }
+      })
     }
   },
   created () {
@@ -127,7 +137,8 @@ export default {
       'totalCount',
       'selCount',
       'selPrice',
-      'isAllChecked'
+      'isAllChecked',
+      'selCartList'
     ]),
 
     isLogin () {

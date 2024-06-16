@@ -3,8 +3,13 @@
 </template>
 
 <script>
+import isLogin from '@/mixins/isLogin'
 export default {
-  name: 'userIndex'
+  name: 'userIndex',
+  mixins: [isLogin],
+  created () {
+
+  }
 }
 </script>
 

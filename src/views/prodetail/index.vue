@@ -105,7 +105,7 @@
         <!-- 有库存才显示提交按钮 -->
         <div class="showbtn" v-if="detail.stock_total > 0">
           <div @click="addCountFn" class="btn" v-if="mode === 'cart'">加入购物车</div>
-          <div class="btn now" v-else >立刻购买</div>
+          <div @click="buyNowFn" class="btn now" v-else >立刻购买</div>
         </div>
 
         <div class="btn-none" v-else>该商品已抢完</div>
@@ -118,11 +118,12 @@
 import { getProDetail, getProComments } from '@/api/product'
 import user from '@/assets/user.png'
 import CountBox from '@/components/CountBox.vue'
-import { Dialog } from 'vant'
 import { addCart } from '@/api/cart'
+import isLogin from '@/mixins/isLogin'
 
 export default {
   name: 'ProDetail',
+  mixins: [isLogin],
   data () {
     return {
       images: [],
@@ -136,6 +137,11 @@ export default {
       addCount: 1
     }
   },
+  computed: {
+    goodsId () {
+      return this.$route.params.id
+    }
+  },
   created () {
     this.getProDetailFn()
     this.getProCommentsFn()
@@ -146,13 +152,13 @@ export default {
     },
     // 获取商品详情
     async getProDetailFn () {
-      const res = await getProDetail(this.$route.params.id)
+      const res = await getProDetail(this.goodsId)
       this.detail = res.data.detail
       this.images = res.data.detail.goods_images
     },
     // 获取商品评价
     async getProCommentsFn () {
-      const res = await getProComments({ goodsId: this.$route.params.id, limit: 3 })
+      const res = await getProComments({ goodsId: this.goodsId, limit: 3 })
       this.total = res.data.total
       this.commentsList = res.data.list
       console.log(res)
@@ -168,32 +174,30 @@ export default {
     closePannel () {
       this.showPannel = false
     },
+
     // 加入到购物车
     async addCountFn () {
-      // 判断用户是否登录，没有登录，弹框
-      const token = this.$store.getters.token
-      if (!token) {
-        Dialog.confirm({
-          title: '温馨提示',
-          message: '需要登录才能进行此操作哦'
-        })
-          .then(() => {
-            // on confirm
-            const backUrl = this.$route.fullPath
-            this.$router.replace(`/login?backUrl=${backUrl}`)
-          })
-          .catch(() => {
-            // on cancel
-          })
-
-        this.showPannel = false
+      if (!this.isLogin()) {
         return
       }
-
       // 调用接口
-      await addCart(this.$route.params.id, this.addCount, this.detail.skuList[0].goods_sku_id)
+      await addCart(this.goodsId, this.addCount, this.detail.skuList[0].goods_sku_id)
       this.$toast('加入购物车成功')
       this.showPannel = false
+    },
+    buyNowFn () {
+      if (!this.isLogin()) {
+        return
+      }
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          goodsId: this.goodsId,
+          goodsNum: this.addCount,
+          goodsSkuId: this.detail.skuList[0].goods_sku_id
+        }
+      })
     }
   },
   components: {
