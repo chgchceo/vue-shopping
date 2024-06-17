@@ -1,18 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '@/views/login'
-import Prodetail from '@/views/prodetail'
-import Search from '@/views/search'
+
 import Layout from '@/views/layout'
 import Home from '@/views/layout/home'
 import Categoty from '@/views/layout/category'
 import Cart from '@/views/layout/cart'
 import User from '@/views/layout/user'
-import Pay from '@/views/pay'
-import Order from '@/views/order'
 import store from '@/store'
-import SearchList from '@/views/search/list'
 
+const Login = () => import('@/views/login')
+const Prodetail = () => import('@/views/prodetail')
+const Search = () => import('@/views/search')
+const Pay = () => import('@/views/pay')
+const Order = () => import('@/views/order')
+const SearchList = () => import('@/views/search/list')
+const Address = () => import('@/views/address')
+const CreateAddress = () => import('@/views/address/createAddress')
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -34,6 +37,8 @@ const router = new VueRouter({
     { path: '/user', component: User },
     { path: '/pay', component: Pay },
     { path: '/order', component: Order },
+    { path: '/address', component: Address },
+    { path: '/addAddress', component: CreateAddress },
     { path: '/searchlist', component: SearchList }
   ]
 })

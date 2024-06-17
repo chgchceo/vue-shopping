@@ -68,7 +68,7 @@
     <div class="service">
       <div class="title">我的服务</div>
       <div class="content">
-        <div class="content-item">
+        <div @click="$router.push('/address')" class="content-item">
           <van-icon name="records" />
           <span>收货地址</span>
         </div>
@@ -95,7 +95,7 @@
       </div>
     </div>
 
-    <div @click="logout" class="logout-btn">
+    <div v-if="isLogin" @click="logout" class="logout-btn">
      <button >退出登录</button>
     </div>
   </div>
